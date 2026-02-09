@@ -1,0 +1,25 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "swe-bench-pro"
+version = "0.1.0"
+description = "Evaluation harness for SWE-Bench Pro"
+readme = "README.md"
+requires-python = ">=3.10"
+
+# Standard dependencies required for the script to run basic logic
+dependencies = [
+    "pandas",
+    "tqdm",
+]
+
+# Optional extras for specific environments
+[project.optional-dependencies]
+cloud = ["modal"]
+local = ["docker"]
+all = ["modal", "docker"]
+
+[tool.setuptools]
+packages = ["swebench"]
