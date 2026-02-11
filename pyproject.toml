@@ -13,13 +13,8 @@ requires-python = ">=3.10"
 dependencies = [
     "pandas",
     "tqdm",
+    "docker",
 ]
-
-# Optional extras for specific environments
-[project.optional-dependencies]
-cloud = ["modal"]
-local = ["docker"]
-all = ["modal", "docker"]
 
 [tool.setuptools]
 packages = ["swebench"]
