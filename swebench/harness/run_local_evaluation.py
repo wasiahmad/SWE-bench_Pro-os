@@ -6,9 +6,6 @@ import subprocess
 import pandas as pd
 from tqdm import tqdm
 
-# Note: We no longer need docker or get_dockerhub_image_uri
-# as the environment is provided by Apptainer.
-
 
 def load_base_docker(iid):
     # If these files aren't available inside the container,
