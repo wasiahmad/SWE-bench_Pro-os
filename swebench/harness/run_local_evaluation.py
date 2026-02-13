@@ -201,10 +201,12 @@ def main():
 
     raw_sample_df = raw_sample_df.fillna("").set_index("instance_id", drop=False)
 
+    print(f"Loading patches from {args.patch_path}")
     with open(args.patch_path, "r") as f:
         patches_to_run = json.load(f)
 
     for patch_sample in tqdm(patches_to_run, desc="Evaluating"):
+        print(f"Patch sample: {patch_sample}")
         instance_id = patch_sample["instance_id"]
         if instance_id not in raw_sample_df.index:
             continue
