@@ -200,6 +200,7 @@ def main():
         raw_sample_df = pd.read_csv(args.raw_sample_path)
 
     raw_sample_df = raw_sample_df.fillna("").set_index("instance_id", drop=False)
+    print(f"Size of raw_sample_df: {len(raw_sample_df)}")
 
     with open(args.patch_path, "r") as f:
         patches_to_run = json.load(f)
@@ -208,10 +209,13 @@ def main():
 
     for patch_sample in tqdm(patches_to_run, desc="Evaluating"):
         instance_id = patch_sample["instance_id"]
+        print(f"Instance ID: {instance_id}")
         if instance_id not in raw_sample_df.index:
             continue
+        print(f"Found instance ID: {instance_id}")
 
         output_dir = os.path.join(args.output_dir, patch_sample["model_name_or_path"])
+        print(f"Output directory: {output_dir}")
 
         eval_results = {
             instance_id: {
