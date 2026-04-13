@@ -7,12 +7,17 @@ import subprocess
 import pandas as pd
 from tqdm import tqdm
 
+def _dockerfiles_root() -> str:
+    return os.environ.get("SWEBENCH_DOCKERFILES_ROOT", "dockerfiles")
+
 
 def load_base_docker(iid):
     # If these files aren't available inside the container,
     # you may need to ensure the dockerfiles directory is mounted.
     try:
-        with open(f"dockerfiles/base_dockerfile/{iid}/Dockerfile") as fp:
+        root = _dockerfiles_root()
+        path = os.path.join(root, "base_dockerfile", iid, "Dockerfile")
+        with open(path) as fp:
             return fp.read()
     except FileNotFoundError:
         return ""
@@ -20,7 +25,9 @@ def load_base_docker(iid):
 
 def instance_docker(iid):
     try:
-        with open(f"dockerfiles/instance_dockerfile/{iid}/Dockerfile") as fp:
+        root = _dockerfiles_root()
+        path = os.path.join(root, "instance_dockerfile", iid, "Dockerfile")
+        with open(path) as fp:
             return fp.read()
     except FileNotFoundError:
         return ""
@@ -212,11 +219,19 @@ def parse_args():
     parser.add_argument("--output_dir", required=True)
     parser.add_argument("--scripts_dir", required=True)
     parser.add_argument("--redo", action="store_true")
+    parser.add_argument(
+        "--dockerfiles_root",
+        default=None,
+        help="Directory containing base_dockerfile/ and instance_dockerfile/ "
+        "(default: env SWEBENCH_DOCKERFILES_ROOT or 'dockerfiles').",
+    )
     return parser.parse_args()
 
 
 def main():
     args = parse_args()
+    if args.dockerfiles_root:
+        os.environ["SWEBENCH_DOCKERFILES_ROOT"] = args.dockerfiles_root
 
     # Load data
     if args.raw_sample_path.endswith(".jsonl"):
